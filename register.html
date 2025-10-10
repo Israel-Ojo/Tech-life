@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Neumorphic Register</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+   body {
+  background: url("img/progress.jpg") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  position: relative;
+}
+
+    .container {
+      padding: 2rem;
+      border-radius: 25px;
+      margin-right: 68px;
+    }
+    
+    .overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  backdrop-filter: blur(50px);
+  width: 130%;
+  padding: 15px;
+  border-radius: 20px;
+  max-width: 600px;
+  box-shadow: 10px 16px 20px rgba(5, 5, 4, 3.1);
+}
+
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 0.5rem;
+      margin: 0 5px;
+      border: none;
+      border-radius: 15px;
+      background: #02c3bd;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tabs .active {
+      background: #02c3bd;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 10px;
+      border: none;
+      background: #e0e5ec;
+      box-shadow: inset 3px 3px 6px #bec3c9,
+                  inset -3px -3px 6px #ffffff;
+      font-size: 14px;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 0.7rem;
+      border: none;
+      margin-top: 0.5rem;
+      border-radius: 15px;
+      background: #02c3bd;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .register-btn i {
+      margin-right: 5px;
+    }
+
+    .social {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background: #02c3bd;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .or {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+  <div class="overlay">
+    <div class="tabs">
+     <a href="login.html"> <button> Login </button> </a>
+      <button class="active" id="register.html"> Register </button>
+    </div> 
+
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" placeholder="Israel Ojo" id="name" />
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" placeholder="me@codingarmy.fail" id="email" />
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" />
+    </div>
+
+    <div class="input-group">
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPassword" />
+    </div>
+
+    <button class="register-btn" onclick="registerUser()">
+      <i>👤➕</i> Register
+    </button>
+
+    <div class="or">Or sign up with</div>
+    <div class="social">
+      <div class="social-icon">G</div>
+      <div class="social-icon">f</div>
+      <div class="social-icon">🐦</div>
+    </div>
+    </div>
+  </div>
+
+<script>
+
+function registerUser() {
+  let name = document.getElementById('name').value;
+  let email = document.getElementById('email').value;
+  let password = document.getElementById('password').value;
+  let confirmPassword = document.getElementById('confirmPassword').value;
+
+  if (!name || !email || !password || !confirmPassword) {
+    alert("Please fill out all fields.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  let existingData = localStorage.getItem('data');
+  if (existingData) {
+    alert("You've already registered. Please log in.");
+    window.location.href = 'login.html';
+    return;
+  }
+
+  let data = [name, email, password];
+  localStorage.setItem('data', JSON.stringify(data));
+  alert('Welcome Registration successful');
+  window.location.href = 'login.html';
+}
+
+</script>
+</body>
+</html>
