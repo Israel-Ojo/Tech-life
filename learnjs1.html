@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>My First JavaScript</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #0d47a1, #1976d2, #42a5f5); /* different blues */
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    button {
+      background-color: white;
+      color: #0d47a1;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #1976d2;
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    .privacy-1 {
+       background: linear-gradient(to right, #0f0f1c, #0000ff, #0f0f1c);
+        color: #fff;
+        margin: 10px;
+        padding: 10px;
+             box-shadow: 10px 15px 20px rgba(5,5,4,3.1);
+        }
+
+    #demo {
+      margin-top: 25px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+	<div class="privacy-1">
+<center>
+<a href="projects.html"><i class="fas fa-arrow-circle-left"></i></a>
+  <h2>Updated Date And Time </h2>
+  
+ </center>
+ </div>
+ 
+
+  <h1>My First JavaScript</h1>
+
+  <button type="button"
+  onclick="document.getElementById('demo').innerHTML = Date()">
+  Click me to display Date and Time
+  </button>
+
+  <p id="demo"></p>
+
+</body>
+</html>

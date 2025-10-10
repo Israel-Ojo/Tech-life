@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title> ISRAEL </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+             .privacy-1 {
+       background: linear-gradient(to right, #0f0f1c, #0000ff, #0f0f1c);
+        color: #fff;
+        width: 300px;
+        margin: 10px;
+        padding: 10px;
+             box-shadow: 10px 15px 20px rgba(5,5,4,3.1);
+        }
+        
+        #chatbox {
+            width: 90%;
+            max-width: 400px;
+            height: 60vh;
+            border: 1px solid #ccc;
+            background: white;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .message {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing {
+            font-style: italic;
+            color: gray;
+        }
+        #userInput {
+            margin-top: 10px;
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .bot-face {
+            font-size: 50px;
+            transition: transform 0.5s;
+        }
+        .happy { transform: scale(1.2); }
+        .sad { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+    
+    
+    	<div class="privacy-1">
+<center>
+<a href="projects.html"><i class="fas fa-arrow-circle-left"></i></a>
+  <h2>Ai Chat Bot</h2>
+  
+ </center>
+ </div>
+ 
+    
+    <div class="bot-face">Israel 😀</div>
+    <div id="chatbox"></div>
+    <div id="userInput">
+        <input type="text" id="inputField" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="startListening()">🎤</button>
+    </div>
+
+    <script>
+        let memory = { name: "", context: [], mood: "neutral", customResponses: {} };
+
+        function sendMessage(text) {
+            let inputField = document.getElementById("inputField");
+            let chatbox = document.getElementById("chatbox");
+            let userText = text || inputField.value;
+
+            if (userText.trim() === "") return;
+            
+            chatbox.innerHTML += `<p class='message'><strong>You:</strong> ${userText}</p>`;
+            inputField.value = "";
+            chatbox.scrollTop = chatbox.scrollHeight;
+            memory.context.push(userText);
+            
+            let typingIndicator = document.createElement("p");
+            typingIndicator.className = "typing";
+            typingIndicator.innerText = "AI is typing...";
+            chatbox.appendChild(typingIndicator);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            
+            setTimeout(() => {
+                chatbox.removeChild(typingIndicator);
+                let botReply = getBotResponse(userText);
+                chatbox.innerHTML += `<p class='message'><strong>AI:</strong> ${botReply}</p>`;
+                updateFace(botReply);
+                speak(botReply);
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }, 1000);
+        }
+
+        function getBotResponse(input) {
+            input = input.toLowerCase();
+            
+            if (memory.customResponses[input]) {
+                return memory.customResponses[input];
+            }
+            
+            if (input.includes("my name is")) {
+                let name = input.split("my name is ")[1];
+                memory.name = name;
+                return `Nice to meet you, ${name}!`;
+            }
+            if (memory.name && input.includes("what's my name")) {
+                return `Your name is ${memory.name}!`;
+            }
+            
+            let responses = {
+            "hi": "hi Israel, how is it going", 
+            
+            "hey": "hey brr, how are you doing?",
+                "hello": "progress are you alright?you are a goat",
+                 "bawo": " Samuel shey orin ta e nhi?you are a obukos",
+                "how are you": "I'm feeling great! Thanks for asking.",
+                "bye": "See you later! Have an awesome day!",
+                "tell me a joke": "Why don't skeletons fight each other? Because they don't have the guts!",
+                "tell me another joke": "laugh laugh because I'm telling you a joke",
+                "tell me a story": "Once upon a time, a Israel built an AI. The AI got smarter and smarter until it became the best chatbot ever! The end!"
+            };
+            
+            return responses[input] || "That's interesting! Tell me more about it.";
+        }
+
+        function startListening() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                let voiceInput = event.results[0][0].transcript;
+                sendMessage(voiceInput);
+            };
+        }
+
+        function speak(text) {
+            let utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function updateFace(response) {
+            let face = document.querySelector(".bot-face");
+            if (response.includes("great") || response.includes("nice")) {
+                face.textContent = "😃";
+                face.className = "bot-face happy";
+            } else if (response.includes("sad") || response.includes("bad")) {
+                face.textContent = "😢";
+                face.className = "bot-face sad";
+            } else {
+                face.textContent = "😀";
+                face.className = "bot-face";
+            }
+        }
+    </script>
+</body>
+</html>

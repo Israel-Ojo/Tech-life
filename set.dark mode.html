@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+  	 	 <link rel="stylesheet" href="set.darkmode.css" type="text/css"/>
+  <title>Modern Dark Mode</title>
+  
+  <script src="darkmode.js"></script>
+  
+</head>
+<body>
+  <div class="header">
+    <h1>🌐 TECH LIFE COMPANY</h1>
+    <div class="dark-toggle">
+      <input type="checkbox" id="darkSwitch" />
+      <label for="darkSwitch" class="toggle-label">
+        <span class="icon sun"></span>
+        <span class="icon moon"></span>
+        <span class="ball"></span>
+      </label>
+    </div>
+  </div>
+
+<a href="settings&privacy.html">
+<div class="back">
+<i class="fas fa-long-arrow-alt-left"></i>
+</div>
+</a>
+
+  <div class="content">
+    <p>Welcome to my modern styled site with dark mode switch!</p>
+    <p>Try switching themes and refresh — it remembers it 🔥</p>
+  </div>
+
+  <script>
+    // Apply saved theme on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const body = document.body;
+      const toggle = document.getElementById('darkSwitch');
+
+      if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark');
+        toggle.checked = true;
+      }
+
+      toggle.addEventListener('change', () => {
+        if (toggle.checked) {
+          body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+  	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <title>About Me - Ojo Israel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(90deg, #007BFF, #0056b3);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeIn 1.5s ease;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 40px;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    section {
+      margin-bottom: 60px;
+      animation: slideUp 1.5s ease;
+    }
+
+    h2 {
+      color: #0056b3;
+      margin-bottom: 20px;
+      border-left: 5px solid #007BFF;
+      padding-left: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 15px;
+    }
+
+    /* Button */
+    .button {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 14px 35px;
+      background-color: #007BFF;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    img {
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+      border-radius: 12px;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Grid for last two images */
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .image-grid img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+   .fa-arrow-left {
+  font-size: 40px;     
+  color: #fff;        
+  cursor: pointer;     
+  transition: all 0.3s ease; 
+  margin-right: 160px;
+}
+
+
+
+.fa-arrow-left:hover {
+  color: #007bff;      
+  transform: scale(1.2); 
+}
+
+
+    /* Responsive for small screens */
+    @media (max-width: 768px) {
+      .image-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      background: #007BFF;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1> Hello, I'm Ojo Israel</h1>
+    <p>A Student • Music Lover • Content Writer • Future Developer</p>
+    
+    <a href="projects.html"><i class="fas fa-arrow-left"></i></a>
+
+    
+    <a href="project.html" class="button">Visit My Website</a>
+  </header>
+
+
+  <div class="container">
+
+    <section>
+      <h2>About Me</h2>
+      <img src="img/Israel (1).jpg" alt="Keyboard picture">
+      <p>I'm a Nigerian student currently finishing my secondary school.</p>
+      <p>I love music instruments and I'm building my skills every day.</p>
+    </section>
+
+    <section>
+      <h2>My Music Skills</h2>
+      <p> Drumming Skills: <strong>61%</strong></p>
+      <p> Keyboard Skills: <strong>30%</strong></p>
+      
+    <div class="image-grid">
+      <img src="img/drum.jpg" alt="Keyboard picture">
+      <img src="img/keyboard (2).jpg" alt="Keyboard picture">
+    </div>
+      
+      <p>As you can see in the picture above.</p>
+    </section>
+
+    <section>
+      <h2>What I Do</h2>
+      <ul>
+      <p><li> I am a content writer. </li></p>
+      </ul>
+      <p> I have a boss guiding me in coding and tech.</p>
+      <p>My boss is the CEO & DIRECTOR of <strong>definaija.xyz</strong>.</p>
+    </section>
+
+    <section>
+      <h2>School Content</h2>
+      <p>I also create content about the subjects I do in school.</p>
+      <p>Click the website button at the top to check them out.</p>
+    </section>
+    
+    <div class="image-grid">
+      <img src="img/Israel (2).jpg" alt="Keyboard picture">
+      <img src="img/Israel (3).jpg" alt="Keyboard picture">
+    </div>
+
+  </div>
+  
+  <footer>
+    FOR: Tech Life
+  </footer>
+
+</body>
+</html>

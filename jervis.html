@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>J.A.R.V.I.S. Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #00ffff;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+         .privacy-1 {
+       background: linear-gradient(to right, #0f0f1c, #0000ff, #0f0f1c);
+        color: #fff;
+        margin: 10px;
+        padding: 10px;
+             box-shadow: 10px 15px 20px rgba(5,5,4,3.1);
+        }
+    
+    #jarvis {
+      position: fixed;
+      bottom: 20px; right: 20px;
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00ffff, #008080);
+      box-shadow: 0 0 15px #00ffff;
+      cursor: pointer;
+      display: flex; justify-content: center; align-items: center;
+      animation: pulse 3s infinite;
+      z-index: 10000;
+    }
+    #jarvis svg { width: 40px; height: 40px; fill: #000; }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px #00ffff; }
+      50% { box-shadow: 0 0 30px #00ffff; }
+    }
+    #assistant-panel {
+      position: fixed;
+      bottom: 110px; right: 20px;
+      width: 320px; max-width: 90vw;
+      background: rgba(0,255,255,0.1);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 20px;
+      color: #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      font-size: 16px;
+      display: none; flex-direction: column;
+      z-index: 10000;
+    }
+    #assistant-panel h2 {
+      margin-top: 0; font-size: 22px; text-align: center;
+    }
+    #output {
+      min-height: 60px;
+      margin: 15px 0; padding: 10px;
+      background: rgba(0,255,255,0.15);
+      border-radius: 8px; font-family: monospace;
+      white-space: pre-wrap;
+    }
+    button#listen-btn {
+      background: #00ffff; color: black;
+      border: none; border-radius: 12px;
+      padding: 12px 20px; font-size: 16px;
+      cursor: pointer; margin-top: 10px;
+    }
+    button#listen-btn:hover {
+      background: #008080; color: #00ffff;
+    }
+  </style>
+</head>
+<body>
+
+
+    	<div class="privacy-1">
+<center>
+<a href="projects.html"><i class="fas fa-arrow-circle-left"></i></a>
+  <h1>Ai Voice Chat Bot</h1>
+  
+ </center>
+ </div>
+ 
+
+  <div id="jarvis">
+    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30"/></svg>
+  </div>
+
+  <div id="assistant-panel">
+    <h2>J.A.R.V.I.S. Online</h2>
+    <div id="output">Click "Listen" and speak.</div>
+    <button id="listen-btn">🎤 Listen</button>
+  </div>
+
+  <script>
+    const jarvisBtn = document.getElementById('jarvis');
+    const panel = document.getElementById('assistant-panel');
+    const output = document.getElementById('output');
+    const listenBtn = document.getElementById('listen-btn');
+
+    jarvisBtn.addEventListener('click', () => {
+      panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+    });
+
+    function speak(text) {
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.rate = 1;
+      speechSynthesis.speak(msg);
+    }
+
+    // --- REPLY SYSTEM ---
+    function getReply(command) {
+      if (command.includes("hello")) return "Hello Israel, how can I help you?";
+      if (command.includes("who are you")) return "I am J.A.R.V.I.S., your personal assistant.";
+      if (command.includes("time")) return "The time is " + new Date().toLocaleTimeString();
+      if (command.includes("date")) return "Today is " + new Date().toDateString();
+      if (command.includes("how are you")) return "I'm running smoothly, thanks for asking!";
+      if (command.includes("open google")) { window.open("https://google.com", "_blank"); return "Opening Google..."; }
+      return "Sorry, I don’t understand that yet.";
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      recognition.onstart = () => { output.textContent = "Listening..."; };
+      recognition.onerror = () => { output.textContent = "Error, try again."; };
+
+      recognition.onresult = (event) => {
+        const command = event.results[0][0].transcript.toLowerCase();
+        output.textContent = "You said: " + command;
+        const reply = getReply(command);
+        setTimeout(() => {
+          output.textContent = reply;
+          speak(reply);
+        }, 800);
+      };
+    } else {
+      output.textContent = "Speech recognition not supported.";
+    }
+
+    listenBtn.addEventListener('click', () => {
+      if (recognition) recognition.start();
+    });
+  </script>
+
+</body>
+</html>

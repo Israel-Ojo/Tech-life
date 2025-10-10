@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PROJECT 3</title>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="project3.css" type="text/css"/>
+  <style>
+    /* ✅ Transitions for hamburger dropdown */
+    .horizontal-line {
+      display: none;
+      flex-direction: column;
+      background: #fff;
+      position: absolute;
+      top: 70px;
+      left: 20px;
+      width: 200px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .horizontal-line.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ✅ Animate hamburger icon */
+    .hamburger-icon span {
+      display: block;
+      height: 4px;
+      background-color: #333;
+      margin: 6px 0;
+      border-radius: 3px;
+      transition: all 0.4s ease;
+    }
+
+    .hamburger-icon.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger-icon.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger-icon.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* ✅ Hover animation for all round divs */
+    .div-one, .div-two, .div-three,
+    .go, .get, .start, .ed {
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .div-one:hover, .div-two:hover, .div-three:hover,
+    .go:hover, .get:hover, .start:hover, .ed:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('hamburger-menu');
+    const icon = document.querySelector('.hamburger-icon');
+
+    if (menu.classList.contains('show')) {
+      // Animate hiding
+      menu.classList.remove('show');
+      icon.classList.remove('open');
+      setTimeout(() => {
+        menu.style.display = 'none';
+      }, 400);
+    } else {
+      // Prepare to show
+      menu.style.display = 'flex';
+      setTimeout(() => {
+        menu.classList.add('show');
+        icon.classList.add('open');
+      }, 10);
+    }
+  }
+</script>
+
+<!-- Your original HTML (unchanged) -->
+<div style="position: relative; display: inline-block;">
+  <div class="hamburger-icon" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <img src="img/project(3).jpg" style="width:970px; height:470px;" alt="Project Image">
+
+  <div class="horizontal-line" id="hamburger-menu">
+    <div class="shop-here">Shop Here</div>
+    <div class="sign-in">Sign In</div>
+    <div class="sign-up">Sign Up</div>
+  </div>
+</div>
+
+<!-- ...your other content stays untouched... -->
+
+</body>
+</html>
