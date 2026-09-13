@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Life — Israel's Modern Dev Platform</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style.css">
+
+</head>
+<body class="bg-darkbg text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+  <!-- Ambient Background Glows -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none glow-bg"></div>
+  <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl pointer-events-none glow-bg" style="animation-delay: 3s;"></div>
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 w-full glass border-b border-slate-800/80 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Left: Mobile Menu Trigger & Logo -->
+      <div class="flex items-center gap-3">
+        <button id="mobileMenuBtn" onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition" aria-label="Toggle Menu">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <a href="#" onclick="switchView('feed')" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center text-white font-extrabold shadow-lg shadow-brand-500/30 group-hover:scale-105 transition">
+            TL
+          </div>
+          <div>
+            <h1 class="font-bold text-lg leading-none tracking-wide text-white group-hover:text-brand-500 transition">Tech Life</h1>
+            <span class="text-xs text-slate-400">Israel's Dev Hub</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Global Search Bar -->
+      <div class="hidden md:flex flex-1 max-w-md relative">
+        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="globalSearch" placeholder="Search tutorials, code snippet, FAQs..." class="w-full bg-slate-900/80 text-sm text-slate-200 pl-10 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500 transition placeholder-slate-500">
+      </div>
+
+      <!-- Right: User Quick Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="switchView('ai-bot')" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-brand-500 border border-brand-500/20 transition">
+          <i class="fas fa-robot text-sm"></i> AI Bot
+        </button>
+
+        <button id="themeToggleBtn" onclick="toggleDarkMode()" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition" title="Toggle Light/Dark Theme">
+          <i id="themeIcon" class="fas fa-moon text-lg"></i>
+        </button>
+
+        <!-- User Profile Pill -->
+        <div onclick="switchView('portfolio')" class="flex items-center gap-2 cursor-pointer p-1 pl-2 pr-3 rounded-full bg-slate-800/60 border border-slate-700 hover:border-brand-500 transition">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-brand-500 to-emerald-400 flex items-center justify-center text-white text-xs font-bold">
+            I
+          </div>
+          <span class="text-xs font-medium text-slate-200 hidden sm:inline">Israel</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 max-w-7xl w-full mx-auto flex">
+    
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed lg:sticky top-[61px] left-0 z-50 lg:z-10 w-64 h-[calc(100vh-61px)] glass border-r border-slate-800/80 flex flex-col justify-between -translate-x-full lg:translate-x-0 transition-transform duration-300">
+      <nav class="p-4 space-y-1 overflow-y-auto">
+        
+        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Main Menu</div>
+        
+        <button onclick="switchView('feed')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left active-nav" data-view="feed">
+          <i class="fas fa-newspaper w-5 text-brand-500"></i> Feed & Highlights
+        </button>
+
+        <button onclick="switchView('about')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="about">
+          <i class="fas fa-info-circle w-5 text-cyan-400"></i> About Tech Life
+        </button>
+
+        <button onclick="switchView('portfolio')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="portfolio">
+          <i class="fas fa-user-graduate w-5 text-emerald-400"></i> Dev Portfolio
+        </button>
+
+        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">Mini Apps Hub</div>
+
+        <button onclick="switchView('ai-bot')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="ai-bot">
+          <i class="fas fa-robot w-5 text-purple-400"></i> AI Assistant Bot
+        </button>
+
+        <button onclick="switchView('calculator')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="calculator">
+          <i class="fas fa-calculator w-5 text-amber-400"></i> Scientific Calc
+        </button>
+
+        <button onclick="switchView('clock')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="clock">
+          <i class="fas fa-clock w-5 text-rose-400"></i> Interactive Clock
+        </button>
+
+        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">Learning & Support</div>
+
+        <button onclick="switchView('learn')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="learn">
+          <i class="fas fa-code w-5 text-blue-400"></i> Web Coding Tutorials
+        </button>
+
+        <button onclick="switchView('support')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-300 hover:text-white hover:bg-brand-600/20 hover:border-brand-500/40 border border-transparent transition text-left" data-view="support">
+          <i class="fas fa-headset w-5 text-teal-400"></i> Help & Support
+        </button>
+
+      </nav>
+
+      <!-- Sidebar Bottom Info -->
+      <div class="p-4 border-t border-slate-800/80">
+        <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-3 rounded-xl border border-slate-700/60 text-xs">
+          <div class="flex items-center gap-2 font-bold text-white mb-1">
+            <i class="fas fa-shield-halved text-brand-500"></i> Israel Dev Suite
+          </div>
+          <p class="text-slate-400 text-[11px]">v2.5 Modern Build • Responsive Pure JS Engine</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
+
+      <!-- ================= VIEW 1: FEED & DASHBOARD ================= -->
+      <section id="view-feed" class="view-panel space-y-6">
+        
+        <!-- Welcome Banner -->
+        <div class="glass p-6 rounded-2xl border border-slate-800 relative overflow-hidden bg-gradient-to-r from-brand-900/40 via-slate-900 to-slate-900">
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span class="px-3 py-1 rounded-full bg-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider border border-brand-500/30">Frontend Innovation</span>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-2">Welcome back, Israel! 👋</h2>
+              <p class="text-slate-400 text-sm mt-1 max-w-xl">Creating smooth, clean, and responsive web applications with pure HTML, CSS, and modern JavaScript.</p>
+            </div>
+            <button onclick="switchView('portfolio')" class="self-start md:self-auto px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg shadow-brand-500/20 transition">
+              Explore Portfolio
+            </button>
+          </div>
+        </div>
+
+        <!-- Feed Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="feedGrid">
+          
+          <!-- Card 1 -->
+          <article class="glass rounded-2xl overflow-hidden border border-slate-800 hover:border-brand-500/50 transition duration-300 flex flex-col">
+            <div class="h-44 bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Frontend Magic" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+              <span class="absolute top-3 left-3 px-2.5 py-1 bg-slate-950/80 backdrop-blur-md rounded-lg text-xs font-semibold text-brand-400 border border-slate-700">Code Architecture</span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg text-white mb-2">Pure Frontend Craftsmanship</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">I use clean HTML, custom CSS, and modern JS to build light, fluid, and responsive user experiences.</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-800 flex items-center justify-between">
+                <button onclick="toggleLike(this)" class="flex items-center gap-1.5 text-slate-400 hover:text-brand-500 text-xs font-medium transition">
+                  <i class="fas fa-thumbs-up text-sm"></i> <span class="like-count">42</span>
+                </button>
+                <button onclick="showToast('Comments feature loaded!')" class="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 text-xs font-medium transition">
+                  <i class="fas fa-comment text-sm"></i> 12 Comments
+                </button>
+                <button onclick="shareCard('Pure Frontend Craftsmanship')" class="flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 text-xs font-medium transition">
+                  <i class="fas fa-share text-sm"></i> Share
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="glass rounded-2xl overflow-hidden border border-slate-800 hover:border-brand-500/50 transition duration-300 flex flex-col">
+            <div class="h-44 bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Cyber & Security" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+              <span class="absolute top-3 left-3 px-2.5 py-1 bg-slate-950/80 backdrop-blur-md rounded-lg text-xs font-semibold text-cyan-400 border border-slate-700">Tech Life Vision</span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg text-white mb-2">Empowering Digital Learners</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Tech Life provides tutorials and modern mini-apps designed to make technology accessible to everyone.</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-800 flex items-center justify-between">
+                <button onclick="toggleLike(this)" class="flex items-center gap-1.5 text-slate-400 hover:text-brand-500 text-xs font-medium transition">
+                  <i class="fas fa-thumbs-up text-sm"></i> <span class="like-count">89</span>
+                </button>
+                <button onclick="showToast('Comments feature loaded!')" class="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 text-xs font-medium transition">
+                  <i class="fas fa-comment text-sm"></i> 24 Comments
+                </button>
+                <button onclick="shareCard('Empowering Digital Learners')" class="flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 text-xs font-medium transition">
+                  <i class="fas fa-share text-sm"></i> Share
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="glass rounded-2xl overflow-hidden border border-slate-800 hover:border-brand-500/50 transition duration-300 flex flex-col">
+            <div class="h-44 bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="UI Micro-Interactions" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+              <span class="absolute top-3 left-3 px-2.5 py-1 bg-slate-950/80 backdrop-blur-md rounded-lg text-xs font-semibold text-emerald-400 border border-slate-700">UX Design</span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg text-white mb-2">Attention to Details</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Animations, layout flow, tactile touch targets, and visual hierarchy — every detail matters for optimal user experience.</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-800 flex items-center justify-between">
+                <button onclick="toggleLike(this)" class="flex items-center gap-1.5 text-slate-400 hover:text-brand-500 text-xs font-medium transition">
+                  <i class="fas fa-thumbs-up text-sm"></i> <span class="like-count">65</span>
+                </button>
+                <button onclick="showToast('Comments feature loaded!')" class="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 text-xs font-medium transition">
+                  <i class="fas fa-comment text-sm"></i> 18 Comments
+                </button>
+                <button onclick="shareCard('Attention to Details')" class="flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 text-xs font-medium transition">
+                  <i class="fas fa-share text-sm"></i> Share
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 2: ABOUT TECH LIFE ================= -->
+      <section id="view-about" class="view-panel hidden space-y-6">
+        <div class="glass p-6 md:p-8 rounded-2xl border border-slate-800">
+          <div class="text-center max-w-2xl mx-auto space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center text-white text-2xl font-black mx-auto shadow-lg shadow-brand-500/30">
+              TL
+            </div>
+            <h2 class="text-3xl font-extrabold text-white">About Tech Life</h2>
+            <p class="text-slate-300 leading-relaxed text-sm md:text-base">
+              At Tech Life, we are dedicated to empowering individuals with modern digital skills. Founded by developers passionate about tech education, we simplify coding concepts for learners everywhere.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 text-center space-y-2">
+              <i class="fab fa-js text-3xl text-amber-400"></i>
+              <h4 class="font-bold text-white">JavaScript Guides</h4>
+              <p class="text-xs text-slate-400">Master DOM manipulation, logic, and asynchronous algorithms.</p>
+            </div>
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 text-center space-y-2">
+              <i class="fab fa-html5 text-3xl text-orange-500"></i>
+              <h4 class="font-bold text-white">HTML5 Layouts</h4>
+              <p class="text-xs text-slate-400">Build accessible and clean web structures from scratch.</p>
+            </div>
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 text-center space-y-2">
+              <i class="fab fa-css3-alt text-3xl text-brand-500"></i>
+              <h4 class="font-bold text-white">CSS3 & Tailwind</h4>
+              <p class="text-xs text-slate-400">Craft pixel-perfect, glassmorphic styling and animations.</p>
+            </div>
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 text-center space-y-2">
+              <i class="fas fa-users text-3xl text-emerald-400"></i>
+              <h4 class="font-bold text-white">Dev Community</h4>
+              <p class="text-xs text-slate-400">Connect with peers, collaborate on code, and share knowledge.</p>
+            </div>
+          </div>
+
+          <!-- Contact Box -->
+          <div class="mt-8 p-6 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h4 class="font-bold text-white text-base">Get in Touch with Tech Life</h4>
+              <p class="text-slate-400 text-xs mt-1">Direct Email: <span class="text-brand-400">israelojo899@gmail.com</span> | <span class="text-brand-400">ojooluwasegun755@gmail.com</span></p>
+            </div>
+            <div class="flex items-center gap-3">
+              <a href="#" onclick="showToast('LinkedIn profile selected')" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-brand-600 flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" onclick="showToast('Facebook profile selected')" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-brand-600 flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" onclick="showToast('Twitter profile selected')" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-brand-600 flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" onclick="showToast('Instagram profile selected')" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-brand-600 flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: DEVELOPER PORTFOLIO ================= -->
+      <section id="view-portfolio" class="view-panel hidden space-y-6">
+        <!-- Hero Bio Card -->
+        <div class="glass p-6 md:p-8 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-center gap-6">
+          <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-gradient-to-tr from-brand-500 via-indigo-500 to-cyan-400 p-1 flex-shrink-0">
+            <div class="w-full h-full bg-slate-900 rounded-xl flex items-center justify-center overflow-hidden relative">
+              <i class="fas fa-user-tie text-5xl text-slate-400"></i>
+            </div>
+          </div>
+          <div class="space-y-2 text-center md:text-left flex-1">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white">Ojo Israel</h2>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">Available for Projects</span>
+            </div>
+            <p class="text-brand-400 font-medium text-sm">Student • Frontend Craftsman • Musician • Content Writer</p>
+            <p class="text-slate-400 text-xs md:text-sm leading-relaxed max-w-2xl">
+              I am a passionate developer creating smooth, lightweight websites. Guided by tech leaders and powered by continuous practice in music and code.
+            </p>
+          </div>
+        </div>
+
+        <!-- Skills Progress Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+              <i class="fas fa-drum text-amber-400"></i> Musical Talent & Practice
+            </h3>
+            
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                  <span>Drumming Mastery</span>
+                  <span>61%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                  <div class="bg-amber-400 h-2.5 rounded-full" style="width: 61%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                  <span>Keyboard & Piano</span>
+                  <span>30%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                  <div class="bg-cyan-400 h-2.5 rounded-full" style="width: 30%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+              <i class="fas fa-laptop-code text-brand-500"></i> Technical Expertise
+            </h3>
+            
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                  <span>HTML5 & Semantic Web</span>
+                  <span>90%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                  <div class="bg-brand-500 h-2.5 rounded-full" style="width: 90%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                  <span>CSS3 & Modern Layouts</span>
+                  <span>85%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                  <div class="bg-indigo-500 h-2.5 rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 4: AI CHATBOT APP ================= -->
+      <section id="view-ai-bot" class="view-panel hidden space-y-4">
+        <div class="glass p-4 md:p-6 rounded-2xl border border-slate-800 max-w-3xl mx-auto flex flex-col h-[75vh]">
+          
+          <!-- Bot Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <div id="botFace" class="w-12 h-12 rounded-2xl bg-slate-900 border border-brand-500/40 flex items-center justify-center text-2xl shadow-md transition-all">
+                😀
+              </div>
+              <div>
+                <h3 class="font-bold text-white text-base">Israel AI Assistant</h3>
+                <span class="text-xs text-emerald-400 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Online & Ready
+                </span>
+              </div>
+            </div>
+            <button onclick="clearChat()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition">
+              <i class="fas fa-trash-alt mr-1"></i> Clear
+            </button>
+          </div>
+
+          <!-- Chat Messages Container -->
+          <div id="chatMessages" class="flex-1 overflow-y-auto py-4 space-y-3 pr-2">
+            <!-- Initial Greeting -->
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                AI
+              </div>
+              <div class="bg-slate-800/90 text-slate-200 text-sm p-3.5 rounded-2xl rounded-tl-none border border-slate-700 max-w-[85%] leading-relaxed">
+                Hello Israel! I am your Tech Life AI assistant. Ask me anything about coding, your portfolio, or ask for a joke!
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Controls -->
+          <div class="pt-3 border-t border-slate-800 space-y-2">
+            <div class="flex items-center gap-2">
+              <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendChatMessage()" placeholder="Type your message here..." class="flex-1 bg-slate-900 text-slate-100 text-sm px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500 transition">
+              
+              <button onclick="triggerVoiceInput()" title="Voice Input" class="p-3 bg-slate-800 hover:bg-slate-700 text-brand-400 rounded-xl border border-slate-700 transition">
+                <i class="fas fa-microphone"></i>
+              </button>
+
+              <button onclick="sendChatMessage()" class="px-5 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold text-sm transition shadow-lg shadow-brand-500/20">
+                Send
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 5: CALCULATOR APP ================= -->
+      <section id="view-calculator" class="view-panel hidden space-y-4">
+        <div class="glass p-6 rounded-2xl border border-slate-800 max-w-sm mx-auto shadow-2xl">
+          
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+              <i class="fas fa-calculator text-brand-500"></i> Scientific Calc
+            </h3>
+            <span class="text-xs text-slate-400">Glassmorphic UI</span>
+          </div>
+
+          <!-- Screen Display -->
+          <div class="mb-4 bg-slate-950 p-4 rounded-xl border border-slate-800 text-right">
+            <div id="calcHistory" class="text-xs text-slate-500 h-4 overflow-hidden mb-1"></div>
+            <input type="text" id="calcDisplay" readonly value="0" class="w-full bg-transparent text-right text-3xl font-mono font-bold text-white focus:outline-none">
+          </div>
+
+          <!-- Keypad Grid -->
+          <div class="grid grid-cols-4 gap-2.5">
+            <button onclick="calcClear()" class="p-3 bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 font-bold rounded-xl text-sm border border-rose-500/30 transition">AC</button>
+            <button onclick="calcBack()" class="p-3 bg-slate-800 text-slate-200 hover:bg-slate-700 font-bold rounded-xl text-sm border border-slate-700 transition">←</button>
+            <button onclick="calcOp('%')" class="p-3 bg-slate-800 text-brand-400 hover:bg-slate-700 font-bold rounded-xl text-sm border border-slate-700 transition">%</button>
+            <button onclick="calcOp('/')" class="p-3 bg-brand-600/30 text-brand-400 hover:bg-brand-600/50 font-bold rounded-xl text-sm border border-brand-500/40 transition">÷</button>
+
+            <button onclick="calcNum('7')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">7</button>
+            <button onclick="calcNum('8')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">8</button>
+            <button onclick="calcNum('9')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">9</button>
+            <button onclick="calcOp('*')" class="p-3 bg-brand-600/30 text-brand-400 hover:bg-brand-600/50 font-bold rounded-xl text-sm border border-brand-500/40 transition">×</button>
+
+            <button onclick="calcNum('4')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">4</button>
+            <button onclick="calcNum('5')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">5</button>
+            <button onclick="calcNum('6')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">6</button>
+            <button onclick="calcOp('-')" class="p-3 bg-brand-600/30 text-brand-400 hover:bg-brand-600/50 font-bold rounded-xl text-sm border border-brand-500/40 transition">-</button>
+
+            <button onclick="calcNum('1')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">1</button>
+            <button onclick="calcNum('2')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">2</button>
+            <button onclick="calcNum('3')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">3</button>
+            <button onclick="calcOp('+')" class="p-3 bg-brand-600/30 text-brand-400 hover:bg-brand-600/50 font-bold rounded-xl text-sm border border-brand-500/40 transition">+</button>
+
+            <button onclick="calcSqrt()" class="p-3 bg-slate-800 text-brand-400 hover:bg-slate-700 font-bold rounded-xl text-sm border border-slate-700 transition">√</button>
+            <button onclick="calcNum('0')" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">0</button>
+            <button onclick="calcDot()" class="p-3 bg-slate-900 text-white hover:bg-slate-800 font-bold rounded-xl text-base border border-slate-800 transition">.</button>
+            <button onclick="calcEquals()" class="p-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-base shadow-lg shadow-brand-500/30 transition">=</button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 6: INTERACTIVE CLOCK APP ================= -->
+      <section id="view-clock" class="view-panel hidden space-y-6">
+        <div class="glass p-6 md:p-8 rounded-2xl border border-slate-800 max-w-xl mx-auto text-center space-y-6">
+          <h3 class="font-bold text-white text-xl">Tech Life Wall Clock</h3>
+
+          <!-- Analog Clock Face -->
+          <div class="relative w-64 h-64 md:w-72 md:h-72 mx-auto rounded-full border-4 border-slate-700 bg-slate-950 shadow-2xl flex items-center justify-center">
+            
+            <!-- Clock Markers -->
+            <div class="absolute inset-2 rounded-full border border-slate-800/60"></div>
+            
+            <span class="absolute top-3 font-bold text-slate-400 text-sm">12</span>
+            <span class="absolute right-4 font-bold text-slate-400 text-sm">3</span>
+            <span class="absolute bottom-3 font-bold text-slate-400 text-sm">6</span>
+            <span class="absolute left-4 font-bold text-slate-400 text-sm">9</span>
+
+            <!-- Hands -->
+            <div id="hourHand" class="absolute w-1.5 h-16 bg-white rounded-full origin-bottom top-[20%] left-[calc(50%-3px)] transition-transform duration-300"></div>
+            <div id="minuteHand" class="absolute w-1 h-24 bg-brand-400 rounded-full origin-bottom top-[10%] left-[calc(50%-2px)] transition-transform duration-300"></div>
+            <div id="secondHand" class="absolute w-0.5 h-28 bg-rose-500 rounded-full origin-bottom top-[5%] left-[calc(50%-1px)]"></div>
+            
+            <!-- Pivot Center -->
+            <div class="w-4 h-4 rounded-full bg-white z-10 shadow-md"></div>
+          </div>
+
+          <!-- Digital Time Readout -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 inline-block px-8">
+            <div id="digitalClock" class="font-mono text-3xl font-extrabold text-brand-400">00:00:00 PM</div>
+            <div id="digitalDate" class="text-xs text-slate-400 mt-1 uppercase tracking-wider">Monday, Jan 1</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 7: CODE TUTORIALS ================= -->
+      <section id="view-learn" class="view-panel hidden space-y-6">
+        <div class="glass p-6 rounded-2xl border border-slate-800 space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Web Development Tutorials</h2>
+              <p class="text-slate-400 text-sm">Learn HTML, CSS, and JS fundamentals interactively.</p>
+            </div>
+            <span class="px-3 py-1 bg-brand-500/20 text-brand-400 rounded-full text-xs font-semibold">Free Reference</span>
+          </div>
+
+          <!-- Code Reference Cards -->
+          <div class="space-y-4">
+            
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-orange-400 text-base"><i class="fab fa-html5 mr-2"></i>HTML5 Document Structure</h4>
+                <button onclick="copyCode(this)" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <pre class="bg-slate-950 p-4 rounded-lg text-xs font-mono text-slate-300 overflow-x-auto"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello Tech Life!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-brand-400 text-base"><i class="fab fa-css3-alt mr-2"></i>CSS Flexbox Layout</h4>
+                <button onclick="copyCode(this)" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <pre class="bg-slate-950 p-4 rounded-lg text-xs font-mono text-slate-300 overflow-x-auto"><code>.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}</code></pre>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 8: HELP & SUPPORT ================= -->
+      <section id="view-support" class="view-panel hidden space-y-6">
+        <div class="glass p-6 rounded-2xl border border-slate-800 space-y-6">
+          <div>
+            <h2 class="text-2xl font-bold text-white">Help & Support Center</h2>
+            <p class="text-slate-400 text-sm">Submit support requests or read answers to common questions.</p>
+          </div>
+
+          <!-- FAQ Section -->
+          <div class="space-y-3">
+            <details class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 group">
+              <summary class="font-semibold text-white text-sm cursor-pointer list-none flex justify-between items-center">
+                What is Tech Life?
+                <i class="fas fa-chevron-down text-slate-400 group-open:rotate-180 transition"></i>
+              </summary>
+              <p class="text-slate-400 text-xs mt-3 leading-relaxed">Tech Life is Israel's educational portfolio platform offering tutorials, mini web applications, and UI tools.</p>
+            </details>
+
+            <details class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 group">
+              <summary class="font-semibold text-white text-sm cursor-pointer list-none flex justify-between items-center">
+                Can I request custom frontend development?
+                <i class="fas fa-chevron-down text-slate-400 group-open:rotate-180 transition"></i>
+              </summary>
+              <p class="text-slate-400 text-xs mt-3 leading-relaxed">Yes! Reach out via the contact form or email Israel directly at israelojo899@gmail.com.</p>
+            </details>
+          </div>
+
+          <!-- Support Request Form -->
+          <form onsubmit="event.preventDefault(); showToast('Support ticket submitted successfully!');" class="space-y-4 pt-4 border-t border-slate-800">
+            <h4 class="font-bold text-white text-sm">Submit a Ticket</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="text" placeholder="Your Name" required class="bg-slate-900 text-sm text-slate-200 p-3 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500">
+              <input type="email" placeholder="Your Email" required class="bg-slate-900 text-sm text-slate-200 p-3 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500">
+            </div>
+            <textarea placeholder="Describe your issue or feedback..." rows="3" required class="w-full bg-slate-900 text-sm text-slate-200 p-3 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500"></textarea>
+            <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold text-sm transition">Send Ticket</button>
+          </form>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white border border-brand-500 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <i class="fas fa-info-circle text-brand-400"></i>
+    <span id="toastMsg" class="text-xs font-medium">Notification</span>
+  </div>
+
+
+   <script src="js/script.js"></script>
+</body>
+</html>
